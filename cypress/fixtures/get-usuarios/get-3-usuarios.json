@@ -1,0 +1,23 @@
+[
+    {
+        "id": "ca7e7d86-63c9-4962-b5a1-42e73968e8ef",
+        "name": "Helene",
+        "email": "vernice_jerde48@hotmail.com",
+        "createdAt": "2024-04-26T20:45:44.936Z",
+        "updatedAt": "2024-04-26T20:45:44.936Z"
+    },
+    {
+        "id": "bafe37d7-e542-4a78-a1af-816a28277b5a",
+        "name": "Joao Pedro",
+        "email": "joao@gmail.com",
+        "createdAt": "2024-04-26T20:45:51.191Z",
+        "updatedAt": "2024-04-26T20:45:51.191Z"
+    },
+    {
+        "id": "2966621f-3118-435b-8443-ddb51c57eae0",
+        "name": "Joao Pedro",
+        "email": "geovany_fisher@gmail.com",
+        "createdAt": "2024-04-26T20:46:04.522Z",
+        "updatedAt": "2024-04-26T20:46:04.522Z"
+    }
+]
