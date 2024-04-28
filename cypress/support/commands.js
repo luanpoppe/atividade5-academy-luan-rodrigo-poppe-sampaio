@@ -12,11 +12,10 @@ import { faker } from '@faker-js/faker';
 const apiUrl = Cypress.env("apiUrl")
 
 Cypress.Commands.add("createUserApi", function () {
-    cy.log("Entrou no commands")
-
+    const nameFaker = "teste" + faker.person.firstName()
     return cy.request("POST", `${apiUrl}/users`, {
-        name: faker.person.firstName(),
-        email: faker.internet.email({ firstName: this.name })
+        name: nameFaker,
+        email: faker.internet.email({ firstName: nameFaker }).toLowerCase()
     }).its("body")
 })
 
