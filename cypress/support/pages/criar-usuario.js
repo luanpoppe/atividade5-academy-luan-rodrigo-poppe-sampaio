@@ -8,4 +8,8 @@ export class CriarUsuario {
 
     buttonHome = "[href='/']"
     buttonVoltar = "[href='/users']"
+
+    clicarBotaoSalvar() {
+        cy.get(this.buttonSalvar).click()
+    }
 }
