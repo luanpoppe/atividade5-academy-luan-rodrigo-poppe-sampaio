@@ -130,12 +130,22 @@ describe('Testes de criar usuário', function () {
   })
 
   describe("Tentativa de cadastro sem sucesso", function () {
+    function postRequest() {
+      return cy.get("@tentativaDeCriarUsuario")
+    }
+    beforeEach(function () {
+      cy.intercept("POST", "/api/v1//users").as("tentativaDeCriarUsuario")
+
+    })
+
     it('Campo de nome e de email vazios', function () {
       criarUsuario.clicarBotaoSalvar()
 
       cy.contains("O campo nome é obrigatório.").should("exist")
       cy.contains("O campo e-mail é obrigatório.").should("exist")
       cy.contains("Usuário salvo com sucesso!").should("not.exist")
+
+      postRequest().should("not.exist")
     })
 
     describe('Validação do campo de nome', function () {
@@ -147,6 +157,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
 
       it('Nome com menos de 4 caracteres não é aceito', function () {
@@ -158,6 +169,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
 
       it('Nome com 100 ou mais caracteres não é aceito', function () {
@@ -174,6 +186,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
 
       it('Nome contendo números não é aceito', function () {
@@ -185,6 +198,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
 
       it('Nome contendo símbolos não é aceito', function () {
@@ -196,6 +210,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
     })
 
@@ -208,6 +223,8 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo nome é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+
+        postRequest().should("not.exist")
       })
 
       it('Email com 60 ou mais caracteres não é aceito', function () {
@@ -224,6 +241,8 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+
+        postRequest().should("not.exist")
       })
 
       it('Email sem conter o símbolo de @', function () {
@@ -235,6 +254,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
 
       it('Email sem caracteres após o @', function () {
@@ -246,6 +266,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
 
       it('Email sem conter o ".com" ou ".*" ao final', function () {
@@ -257,6 +278,7 @@ describe('Testes de criar usuário', function () {
 
         cy.contains("O campo e-mail é obrigatório.").should("not.exist")
         cy.contains("Usuário salvo com sucesso!").should("not.exist")
+        postRequest().should("not.exist")
       })
     })
 
