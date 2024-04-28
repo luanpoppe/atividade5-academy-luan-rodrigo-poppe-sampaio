@@ -10,4 +10,8 @@ export class PaginaInicial {
 
     inputPesquisar = "[placeholder='E-mail ou nome']"
     itemPaginacaoAtual = "#paginacaoAtual"
+
+    pesquisarUsuario(valorPesquisa) {
+        return cy.get(this.inputPesquisar).type(valorPesquisa)
+    }
 }
