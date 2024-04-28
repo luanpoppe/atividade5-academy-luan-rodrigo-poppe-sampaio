@@ -1,7 +1,7 @@
 import { DetalhesUsuario } from "../support/pages/detalhes-usuario"
 import { PaginaInicial } from "../support/pages/pagina-inicial"
 
-describe('template spec', () => {
+describe('Testes de listar usuários', () => {
   const paginaInicial = new PaginaInicial()
   const baseUrl = "https://rarocrud-frontend-88984f6e4454.herokuapp.com"
 
