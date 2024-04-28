@@ -1,5 +1,4 @@
 import { PaginaInicial } from "../support/pages/pagina-inicial"
-import { faker } from '@faker-js/faker';
 
 describe('template spec', () => {
   const paginaInicial = new PaginaInicial()
@@ -180,5 +179,41 @@ describe('template spec', () => {
       cy.get(paginaInicial.buttonNovoUsuario).click()
       cy.url().should("equal", baseUrl + "/users/novo")
     })
+  })
+
+  describe.only('Botão de ver detalhes abre página do usuário correto', function () {
+    let usuarioCriado
+    const apiUrl = Cypress.env("apiUrl")
+
+    after(function () {
+      cy.deleteUserApi(usuarioCriado.id)
+    })
+
+    it('Ver detalhes de todos os usuários', function () {
+      cy.createUserApi().then(function (bodyCriado) {
+        usuarioCriado = bodyCriado
+
+        cy.intercept("GET", "api/v1/users", {
+          body: [{
+            "id": usuarioCriado.id,
+            "name": usuarioCriado.name,
+            "email": usuarioCriado.email,
+            // "createdAt": "2024-04-26T20:45:44.936Z",
+            // "updatedAt": "2024-04-26T20:45:44.936Z"
+          }]
+        }).as("getUsers")
+
+        cy.wait("@getUsers")
+
+
+        cy.get(paginaInicial.itensListaUsuarios).find("a").click()
+        cy.url().should("equal", baseUrl + "/users/" + usuarioCriado.id)
+
+      })
+    })
+
+    // it('Deve mostrar mensgaem de erro ao passar id não existente', function () {
+
+    // })
   })
 })
