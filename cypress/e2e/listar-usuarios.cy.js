@@ -1,3 +1,4 @@
+import { DetalhesUsuario } from "../support/pages/detalhes-usuario"
 import { PaginaInicial } from "../support/pages/pagina-inicial"
 
 describe('template spec', () => {
@@ -181,15 +182,16 @@ describe('template spec', () => {
     })
   })
 
-  describe.only('Botão de ver detalhes abre página do usuário correto', function () {
+  describe('Página de detalhes de um usuário', function () {
     let usuarioCriado
-    const apiUrl = Cypress.env("apiUrl")
+    const detalhesUsuario = new DetalhesUsuario()
 
     after(function () {
       cy.deleteUserApi(usuarioCriado.id)
     })
 
-    it('Ver detalhes de todos os usuários', function () {
+    it('Ver detalhes de um usuário', function () {
+      cy.intercept("GET", "/api/v1/users/*",).as("getUserInfo")
       cy.createUserApi().then(function (bodyCriado) {
         usuarioCriado = bodyCriado
 
@@ -205,15 +207,50 @@ describe('template spec', () => {
 
         cy.wait("@getUsers")
 
-
         cy.get(paginaInicial.itensListaUsuarios).find("a").click()
         cy.url().should("equal", baseUrl + "/users/" + usuarioCriado.id)
 
+
+        cy.wait("@getUserInfo")
+
+        cy.get(detalhesUsuario.inputId).should("have.value", usuarioCriado.id)
+        cy.get(detalhesUsuario.inputName).should("have.value", usuarioCriado.name)
+        cy.get(detalhesUsuario.inputEmail).should("have.value", usuarioCriado.email)
       })
     })
 
-    // it('Deve mostrar mensgaem de erro ao passar id não existente', function () {
+    describe('Mensagem de usuário não encontrado', function () {
+      const elementoModal = '[aria-modal="true"]'
 
-    // })
+      beforeEach(function () {
+        cy.visit("/users/idNaoExistente")
+      })
+
+      it('Deve mostrar mensgaem de erro ao passar uma url com id não existente', function () {
+        cy.get(`${elementoModal} h2`).should('have.text', "Usuário não encontrado")
+        cy.get(`${elementoModal} p`).should('have.text', "Não foi possível localizar o usuário.")
+        cy.get(`${elementoModal} button`).contains("Cancelar").should("exist")
+        cy.get(`${elementoModal} button`).contains("x").should("exist")
+
+        cy.get(detalhesUsuario.inputId).should("have.value", "")
+        cy.get(detalhesUsuario.inputName).should("have.value", "")
+        cy.get(detalhesUsuario.inputEmail).should("have.value", "")
+      })
+
+      it('Clicar fora do modal não deve fechar o modal', function () {
+        cy.get('#root > div div.sc-imWYAI.gFGqvV').click({ force: true })
+        cy.get(elementoModal).should('exist')
+      })
+
+      it("Botão de cancelar e botão de fechar do modal de usuário não encontrado funcionam", function () {
+        cy.get(`${elementoModal} button`).contains("Cancelar").click()
+        cy.url().should('equal', `${baseUrl}/users`)
+
+        cy.visit("/users/idNaoExistente")
+        cy.get(`${elementoModal} button`).contains("x").click()
+        cy.url().should('equal', `${baseUrl}/users`)
+      })
+    })
+
   })
 })
