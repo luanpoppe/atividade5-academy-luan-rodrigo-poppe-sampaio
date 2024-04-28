@@ -3,6 +3,7 @@ export class PaginaInicial {
     buttonPreviousPage = "#paginacaoVoltar"
     buttonPreviousPage = "#paginacaoVoltar"
     buttonNovoUsuario = "[href='/users/novo']"
+    buttonHome = "[href='/']"
 
     divListaUsuarios = "#listaUsuarios"
     itensListaUsuarios = `${this.divListaUsuarios} > div`
