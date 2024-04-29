@@ -40,6 +40,28 @@ describe('Testes de pesquisa de usuários', function () {
     cy.get(paginaInicial.inputPesquisar).should("not.have.value")
   })
 
+  it('Botão de resetar pesquisa realiza uma requisição a todos os usuários', function () {
+    cy.intercept("GET", "/api/v1/users").as("getTodosUsuarios")
+
+    paginaInicial.pesquisarUsuario("aa")
+    cy.get("@getTodosUsuarios").should("not.exist")
+    cy.get('.sc-iGgWBj.cvYpuE').eq(1).click()
+
+    cy.wait("@getTodosUsuarios").should("exist")
+
+  })
+
+  it('Apagar o valor do campo de pesquisa realiza uma requisição a todos os usuários', function () {
+    cy.intercept("GET", "/api/v1/users").as("getTodosUsuarios")
+
+    paginaInicial.pesquisarUsuario("aa")
+    cy.get("@getTodosUsuarios").should("not.exist")
+    paginaInicial.pesquisarUsuario("{backspace}{backspace}")
+
+    cy.wait("@getTodosUsuarios").should("exist")
+
+  })
+
   it('Pesquisar por usuário que não existe mostra tela correspondente', function () {
     const nomeASerPesquisado = "usuarioNaoExistenteComCertezaNaoExisteEsseUser@gmail.com"
 
